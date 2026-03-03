@@ -11,7 +11,9 @@
     "require": {
         "php": "^8.2",
         "ext-json": "*",
-        "sylius/sylius": "^2.0"
+        "sylius/sylius": "^2.0",
+        "webgriffe/doctrine-orm-batcher": "^1.0.0-alpha",
+        "webgriffe/doctrine-orm-batcher-bundle": "^1.0.0-alpha"
     },
     "require-dev": {
         "behat/behat": "^3.16",
@@ -101,6 +103,16 @@
             "@behat"
         ]
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/webgriffe/doctrine-orm-batcher"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/webgriffe/DoctrineORMBatcherBundle"
+        }
+    ],
     "replace": {
         "setono/sylius-feed-plugin": "*"
     }
