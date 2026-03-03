@@ -1,10 +1,15 @@
 {
-    "name": "setono/sylius-feed-plugin",
-    "description": "Plugin to generate feeds within the Sylius ecommerce platform",
-    "license": "MIT",
+    "name": "webgriffe/sylius-feed-plugin",
     "type": "sylius-plugin",
+    "description": "Plugin to generate feeds within the Sylius ecommerce platform",
+    "keywords": [
+        "sylius",
+        "feed",
+        "sylius-plugin"
+    ],
+    "license": "MIT",
     "require": {
-        "php": ">=8.1",
+        "php": "^8.2",
         "ext-json": "*",
         "doctrine/collections": "^1.6",
         "doctrine/orm": "^2.7",
@@ -62,20 +67,6 @@
         "symfony/webpack-encore-bundle": "^1.17.2",
         "willdurand/negotiation": "^3.1"
     },
-    "prefer-stable": true,
-    "autoload": {
-        "psr-4": {
-            "Setono\\SyliusFeedPlugin\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Setono\\SyliusFeedPlugin\\Tests\\": "tests/"
-        },
-        "classmap": [
-            "tests/Application/Kernel.php"
-        ]
-    },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": false,
@@ -89,10 +80,54 @@
         },
         "sort-packages": true
     },
+    "extra": {
+        "symfony": {
+            "require": "^7.4"
+        },
+        "public-dir": "vendor/sylius/test-application/public"
+    },
+    "autoload": {
+        "psr-4": {
+            "Setono\\SyliusFeedPlugin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Setono\\SyliusFeedPlugin\\": ["tests/", "tests/TestApplication/src/"]
+        }
+    },
     "scripts": {
-        "analyse": "phpstan analyse",
-        "check-style": "ecs check",
-        "fix-style": "ecs check --fix",
-        "phpunit": "phpunit"
+        "database-reset": [
+            "vendor/bin/console doctrine:database:drop --force --if-exists",
+            "vendor/bin/console doctrine:database:create",
+            "vendor/bin/console doctrine:migration:migrate -n",
+            "vendor/bin/console sylius:fixtures:load -n"
+        ],
+        "frontend-clear": [
+            "cd vendor/sylius/test-application && yarn install && yarn build",
+            "vendor/bin/console assets:install"
+        ],
+        "test-app-init": [
+            "@database-reset",
+            "@frontend-clear"
+        ],
+        "ecs": "vendor/bin/ecs check",
+        "phpstan": "vendor/bin/phpstan analyse",
+        "psalm": "vendor/bin/psalm",
+        "phpspec": "vendor/bin/phpspec run --ansi -f progress --no-interaction",
+        "unit": "vendor/bin/phpunit --colors=always",
+        "behat": "vendor/bin/behat --colors --strict -vvv --no-interaction || vendor/bin/behat --colors --strict -vvv --no-interaction --rerun",
+        "tests": [
+            "composer validate --ansi --strict",
+            "@ecs",
+            "@phpstan",
+            "@psalm",
+            "@phpspec",
+            "@unit",
+            "@behat"
+        ]
+    },
+    "replace": {
+        "setono/sylius-feed-plugin": "*"
     }
 }
