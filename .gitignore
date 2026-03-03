@@ -1,14 +1,21 @@
-/.build/
 /vendor/
+/var/
 /node_modules/
+/drivers/
 /composer.lock
 
-/tests/Application/yarn.lock
+/etc/build/*
+!/etc/build/.gitignore
 
 /.phpunit.result.cache
-
-/.claude/*.local.json
+/behat.yml
+/phpunit.xml
+/compose.override.yml
+.phpunit.result.cache
 
 # Symfony CLI https://symfony.com/doc/current/setup/symfony_server.html#different-php-settings-per-project
 /.php-version
 /php.ini
+
+/tests/TestApplication/.env.local
+/tests/TestApplication/.env.*.local

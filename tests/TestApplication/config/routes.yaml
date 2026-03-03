@@ -1,0 +1,5 @@
+setono_sylius_feed_admin:
+    resource: "@SetonoSyliusFeedPlugin/config/routes/admin.php"
+
+setono_sylius_feed_shop:
+    resource: "@SetonoSyliusFeedPlugin/config/routes/shop.php"

@@ -1,40 +1,18 @@
-includes:
-	- phpstan-baseline.neon
-
 parameters:
     level: max
-
+    reportUnmatchedIgnoredErrors: false
     paths:
         - src
-        - tests
+        - tests/Behat
 
     excludePaths:
-        - tests/Application/*
-        - src/DependencyInjection/Configuration.php
+        # Makes PHPStan crash
+        - 'src/DependencyInjection/Configuration.php'
 
-    bootstrapFiles:
-        - vendor/autoload.php
-
-    # Symfony Configuration
-    symfony:
-        consoleApplicationLoader: tests/PHPStan/console_application.php
-
-    # Doctrine Configuration
-    doctrine:
-        repositoryClass: Doctrine\ORM\EntityRepository
-        objectManagerLoader: tests/PHPStan/object_manager.php
-
-    reportUnmatchedIgnoredErrors: false
-    treatPhpDocTypesAsCertain: true
+        # Test dependencies
+        - 'tests/TestApplication/src/**.php'
 
     ignoreErrors:
+        - '/Parameter #1 \$configuration of method Symfony\\Component\\DependencyInjection\\Extension\\Extension::processConfiguration\(\) expects Symfony\\Component\\Config\\Definition\\ConfigurationInterface, Symfony\\Component\\Config\\Definition\\ConfigurationInterface\|null given\./'
         -
-            identifiers:
-                - missingType.iterableValue
-                - doctrine.associationType
-                - doctrine.columnType
-                - missingType.generics
-                - missingType.parameter
-        -
-            identifier: class.notFound
-            message: '#League\\Flysystem\\#'
+            identifier: missingType.iterableValue
