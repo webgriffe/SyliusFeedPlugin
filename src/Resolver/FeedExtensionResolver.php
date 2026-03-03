@@ -8,11 +8,11 @@ use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Registry\FeedTypeRegistryInterface;
 use Twig\Environment;
 
-final class FeedExtensionResolver implements FeedExtensionResolverInterface
+final readonly class FeedExtensionResolver implements FeedExtensionResolverInterface
 {
     public function __construct(
-        private readonly FeedTypeRegistryInterface $feedTypeRegistry,
-        private readonly Environment $twig,
+        private FeedTypeRegistryInterface $feedTypeRegistry,
+        private Environment $twig,
     ) {
     }
 

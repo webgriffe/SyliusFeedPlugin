@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\SyliusFeedPlugin\Message\Command;
 
-final class FinishGeneration implements CommandInterface
+final readonly class FinishGeneration implements CommandInterface
 {
-    public function __construct(private readonly int $feedId)
+    public function __construct(private int $feedId)
     {
     }
 

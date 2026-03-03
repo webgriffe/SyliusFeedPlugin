@@ -9,13 +9,13 @@ use Setono\SyliusFeedPlugin\DataProvider\DataProviderInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 
-final class QueryBuilderEvent
+final readonly class QueryBuilderEvent
 {
     public function __construct(
-        private readonly DataProviderInterface $dataProvider,
-        private readonly QueryBuilder $queryBuilder,
-        private readonly ChannelInterface $channel,
-        private readonly LocaleInterface $locale,
+        private DataProviderInterface $dataProvider,
+        private QueryBuilder $queryBuilder,
+        private ChannelInterface $channel,
+        private LocaleInterface $locale,
     ) {
     }
 

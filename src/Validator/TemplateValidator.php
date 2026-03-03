@@ -7,9 +7,9 @@ namespace Setono\SyliusFeedPlugin\Validator;
 use Setono\SyliusFeedPlugin\Exception\UndefinedBlockException;
 use Twig\Environment;
 
-final class TemplateValidator implements TemplateValidatorInterface
+final readonly class TemplateValidator implements TemplateValidatorInterface
 {
-    public function __construct(private readonly Environment $twig)
+    public function __construct(private Environment $twig)
     {
     }
 

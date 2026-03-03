@@ -6,9 +6,9 @@ namespace Setono\SyliusFeedPlugin\Feed\Model\Google\Shopping;
 
 use JsonSerializable;
 
-final class DateRange implements JsonSerializable, \Stringable
+final readonly class DateRange implements JsonSerializable, \Stringable
 {
-    public function __construct(private readonly DateTime $start, private readonly DateTime $end)
+    public function __construct(private DateTime $start, private DateTime $end)
     {
     }
 

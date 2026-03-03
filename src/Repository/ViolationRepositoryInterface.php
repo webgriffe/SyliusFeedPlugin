@@ -22,8 +22,5 @@ interface ViolationRepositoryInterface extends RepositoryInterface
      */
     public function findCountsGroupedBySeverity($feed = null): array;
 
-    /**
-     * @param mixed $feed
-     */
-    public function createQueryBuilderByFeed($feed): QueryBuilder;
+    public function createQueryBuilderByFeed(mixed $feed): QueryBuilder;
 }

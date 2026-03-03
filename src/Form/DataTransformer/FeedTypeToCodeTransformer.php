@@ -12,9 +12,9 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 /**
  * @implements DataTransformerInterface<string|null, FeedTypeInterface|null>
  */
-final class FeedTypeToCodeTransformer implements DataTransformerInterface
+final readonly class FeedTypeToCodeTransformer implements DataTransformerInterface
 {
-    public function __construct(private readonly FeedTypeRegistryInterface $feedTypeRegistry)
+    public function __construct(private FeedTypeRegistryInterface $feedTypeRegistry)
     {
     }
 

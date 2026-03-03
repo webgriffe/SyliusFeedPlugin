@@ -10,11 +10,11 @@ use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class SendFinishGenerationCommandSubscriber implements EventSubscriberInterface
+final readonly class SendFinishGenerationCommandSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly FeedRepositoryInterface $feedRepository,
-        private readonly MessageBusInterface $commandBus,
+        private FeedRepositoryInterface $feedRepository,
+        private MessageBusInterface $commandBus,
     ) {
     }
 

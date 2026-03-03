@@ -12,12 +12,12 @@ use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Workflow\FeedGraph;
 use Symfony\Component\Workflow\Registry;
 
-final class FeedShowMenuBuilder
+final readonly class FeedShowMenuBuilder
 {
     public function __construct(
-        private readonly FactoryInterface $factory,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly Registry $workflowRegistry,
+        private FactoryInterface $factory,
+        private EventDispatcherInterface $eventDispatcher,
+        private Registry $workflowRegistry,
     ) {
     }
 

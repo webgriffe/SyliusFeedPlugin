@@ -9,20 +9,20 @@ use Setono\SyliusFeedPlugin\FeedContext\FeedContextInterface;
 use Setono\SyliusFeedPlugin\FeedContext\ItemContextInterface;
 use Symfony\Component\Validator\Constraint;
 
-final class FeedType implements FeedTypeInterface
+final readonly class FeedType implements FeedTypeInterface
 {
     /** @var list<string> */
-    private readonly array $validationGroups;
+    private array $validationGroups;
 
     /**
      * @param list<string> $validationGroups
      */
     public function __construct(
-        private readonly string $code,
-        private readonly string $template,
-        private readonly DataProviderInterface $dataProvider,
-        private readonly FeedContextInterface $feedContext,
-        private readonly ItemContextInterface $itemContext,
+        private string $code,
+        private string $template,
+        private DataProviderInterface $dataProvider,
+        private FeedContextInterface $feedContext,
+        private ItemContextInterface $itemContext,
         array $validationGroups = [],
     ) {
         $this->validationGroups = count($validationGroups) === 0 ? [Constraint::DEFAULT_GROUP] : $validationGroups;

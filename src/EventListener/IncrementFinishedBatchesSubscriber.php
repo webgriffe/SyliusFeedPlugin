@@ -8,9 +8,9 @@ use Setono\SyliusFeedPlugin\Event\BatchGeneratedEvent;
 use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class IncrementFinishedBatchesSubscriber implements EventSubscriberInterface
+final readonly class IncrementFinishedBatchesSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly FeedRepositoryInterface $feedRepository)
+    public function __construct(private FeedRepositoryInterface $feedRepository)
     {
     }
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\SyliusFeedPlugin\DTO;
 
-final class SeverityCount
+final readonly class SeverityCount
 {
-    public function __construct(private readonly string $severity, private readonly int $count)
+    public function __construct(private string $severity, private int $count)
     {
     }
 

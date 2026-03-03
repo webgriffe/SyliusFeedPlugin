@@ -13,13 +13,13 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class ProcessFeedAction
+final readonly class ProcessFeedAction
 {
     public function __construct(
-        private readonly MessageBusInterface $commandBus,
-        private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly FlashBagInterface|RequestStack $flashBag,
-        private readonly TranslatorInterface $translator,
+        private MessageBusInterface $commandBus,
+        private UrlGeneratorInterface $urlGenerator,
+        private FlashBagInterface|RequestStack $flashBag,
+        private TranslatorInterface $translator,
     ) {
     }
 

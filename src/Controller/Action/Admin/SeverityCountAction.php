@@ -8,11 +8,11 @@ use Setono\SyliusFeedPlugin\Repository\ViolationRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-final class SeverityCountAction
+final readonly class SeverityCountAction
 {
     public function __construct(
-        private readonly ViolationRepositoryInterface $violationRepository,
-        private readonly Environment $twig,
+        private ViolationRepositoryInterface $violationRepository,
+        private Environment $twig,
     ) {
     }
 
