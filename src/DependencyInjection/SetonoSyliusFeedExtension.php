@@ -8,6 +8,7 @@ use Setono\SyliusFeedPlugin\DataProvider\DataProviderInterface;
 use Setono\SyliusFeedPlugin\FeedType\FeedTypeInterface;
 use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Workflow\FeedGraph;
+use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,6 +18,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class SetonoSyliusFeedExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
+    use PrependDoctrineMigrationsTrait;
+
     public function load(array $configs, ContainerBuilder $container): void
     {
         /**
@@ -45,6 +48,7 @@ final class SetonoSyliusFeedExtension extends AbstractResourceExtension implemen
 
     public function prepend(ContainerBuilder $container): void
     {
+        $this->prependDoctrineMigrations($container);
         if (!$container->hasExtension('framework')) {
             return;
         }
@@ -81,5 +85,25 @@ final class SetonoSyliusFeedExtension extends AbstractResourceExtension implemen
                 ],
             ],
         ]);
+    }
+
+    #[\Override]
+    protected function getMigrationsNamespace(): string
+    {
+        return 'Setono\SyliusFeedPlugin\Migrations';
+    }
+
+    #[\Override]
+    protected function getMigrationsDirectory(): string
+    {
+        return '@SetonoSyliusFeedPlugin/src/Migrations';
+    }
+
+    #[\Override]
+    protected function getNamespacesOfMigrationsExecutedBefore(): array
+    {
+        return [
+            'Sylius\Bundle\CoreBundle\Migrations',
+        ];
     }
 }

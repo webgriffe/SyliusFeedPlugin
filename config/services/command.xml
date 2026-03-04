@@ -5,7 +5,6 @@
     <services>
         <service id="Setono\SyliusFeedPlugin\Command\ProcessFeedsCommand">
             <argument type="service" id="setono_sylius_feed.processor.feed"/>
-
             <tag name="console.command"/>
         </service>
     </services>

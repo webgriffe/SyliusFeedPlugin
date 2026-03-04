@@ -37,4 +37,14 @@ final class SetonoSyliusFeedPlugin extends AbstractResourceBundle
     {
         return dirname(__DIR__);
     }
+
+    #[\Override]
+    protected function getConfigFilesPath(): string
+    {
+        return sprintf(
+            '%s/config/doctrine/%s',
+            $this->getPath(),
+            strtolower($this->getDoctrineMappingDirectory()),
+        );
+    }
 }
