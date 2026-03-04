@@ -32,7 +32,6 @@ use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
@@ -45,7 +44,7 @@ use Throwable;
 use Twig\Environment;
 use Webmozart\Assert\Assert;
 
-final class GenerateBatchHandler implements MessageHandlerInterface
+final class GenerateBatchHandler
 {
     use GetChannelTrait;
     use GetFeedTrait;

@@ -23,13 +23,12 @@ use Setono\SyliusFeedPlugin\Workflow\FeedGraph;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Workflow\Registry;
 use Throwable;
 use Twig\Environment;
 use Webmozart\Assert\Assert;
 
-final class FinishGenerationHandler implements MessageHandlerInterface
+final class FinishGenerationHandler
 {
     use GetFeedTrait;
 

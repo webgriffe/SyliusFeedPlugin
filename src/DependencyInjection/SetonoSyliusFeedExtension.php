@@ -12,6 +12,7 @@ use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceE
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class SetonoSyliusFeedExtension extends AbstractResourceExtension implements PrependExtensionInterface
@@ -26,7 +27,6 @@ final class SetonoSyliusFeedExtension extends AbstractResourceExtension implemen
          * } $config
          */
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $container->setParameter('setono_sylius_feed.storage.feed', $config['storage']['feed']);
         $container->setParameter('setono_sylius_feed.storage.feed_tmp', $config['storage']['feed_tmp']);
@@ -34,7 +34,11 @@ final class SetonoSyliusFeedExtension extends AbstractResourceExtension implemen
         $container->registerForAutoconfiguration(DataProviderInterface::class)->addTag('setono_sylius_feed.data_provider');
         $container->registerForAutoconfiguration(FeedTypeInterface::class)->addTag('setono_sylius_feed.feed_type');
 
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.xml');
+
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $loader->load('services.php');
 
         $this->registerResources('setono_sylius_feed', $config['driver'], $config['resources'], $container);
     }

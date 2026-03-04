@@ -31,4 +31,10 @@ final class SetonoSyliusFeedPlugin extends AbstractResourceBundle
         $container->addCompilerPass(new RegisterFilesystemPass());
         $container->addCompilerPass(new ValidateDataProvidersPass());
     }
+
+    #[\Override]
+    public function getPath(): string
+    {
+        return dirname(__DIR__);
+    }
 }
