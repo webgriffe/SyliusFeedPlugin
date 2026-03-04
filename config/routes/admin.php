@@ -12,7 +12,6 @@ templates: "@SyliusAdmin/shared/crud"
 redirect: show
 grid: setono_sylius_feed_admin_feed
 permission: true
-except: ['update', 'create', 'show']
 vars:
     all:
         subheader: setono_sylius_feed.ui.manage_feeds

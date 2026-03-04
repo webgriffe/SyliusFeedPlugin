@@ -7,6 +7,8 @@ namespace Setono\SyliusFeedPlugin;
 use Setono\SyliusFeedPlugin\DependencyInjection\Compiler\RegisterFeedTypesPass;
 use Setono\SyliusFeedPlugin\DependencyInjection\Compiler\RegisterFilesystemPass;
 use Setono\SyliusFeedPlugin\DependencyInjection\Compiler\ValidateDataProvidersPass;
+use Setono\SyliusFeedPlugin\Model\Feed;
+use Setono\SyliusFeedPlugin\Model\Violation;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Sylius\Bundle\ResourceBundle\AbstractResourceBundle;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
@@ -27,6 +29,8 @@ final class SetonoSyliusFeedPlugin extends AbstractResourceBundle
     {
         parent::build($container);
 
+        $container->setParameter('setono_sylius_feed.model.feed.class', Feed::class);
+        $container->setParameter('setono_sylius_feed.model.violation.class', Violation::class);
         $container->addCompilerPass(new RegisterFeedTypesPass());
         $container->addCompilerPass(new RegisterFilesystemPass());
         $container->addCompilerPass(new ValidateDataProvidersPass());
