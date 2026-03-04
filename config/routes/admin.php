@@ -20,18 +20,6 @@ vars:
 YAML
 , 'sylius.resource');
 
-    $routes->add('setono_sylius_feed_admin_feed_show', '/feeds/{id}')
-        ->controller(['setono_sylius_feed.controller.feed', 'showAction'])
-        ->methods(['GET'])
-        ->defaults([
-            '_sylius' => [
-                'section' => 'admin',
-                'permission' => true,
-                'template' => '@SetonoSyliusFeedPlugin/Admin/Feed/show.html.twig',
-            ],
-        ])
-    ;
-
     $routes->add('setono_sylius_feed_admin_feed_process', '/feeds/{id}/process')
         ->controller('setono_sylius_feed.controller.action.admin.process_feed')
         ->methods(['GET'])
@@ -49,7 +37,7 @@ YAML
                         ],
                     ],
                 ],
-                'template' => '@SyliusAdmin/Crud/index.html.twig',
+                'template' => '@SyliusAdmin/shared/crud/index.html.twig',
                 'grid' => 'setono_sylius_feed_admin_violation',
                 'section' => 'admin',
                 'permission' => true,

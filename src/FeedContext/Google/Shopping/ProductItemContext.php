@@ -90,7 +90,7 @@ class ProductItemContext implements ItemContextInterface
 
             $data->setCondition(
                 $product instanceof ConditionAwareInterface ?
-                    new Condition((string) $product->getCondition()) : Condition::new(),
+                    Condition::from($product->getCondition()) : Condition::new,
             );
 
             if (null !== $productType) {
@@ -237,7 +237,7 @@ class ProductItemContext implements ItemContextInterface
 
     private function getAvailability(ProductVariantInterface $product): Availability
     {
-        return $this->availabilityChecker->isStockAvailable($product) ? Availability::inStock() : Availability::outOfStock();
+        return $this->availabilityChecker->isStockAvailable($product) ? Availability::inStock : Availability::outOfStock;
     }
 
     private function createPrice(int $price, ChannelInterface $channel): ?Price

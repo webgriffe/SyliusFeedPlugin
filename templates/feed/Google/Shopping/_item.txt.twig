@@ -1,4 +1,4 @@
-{# @var item \Setono\SyliusFeedPlugin\Feed\Model\Google\Shopping\Product #}
+{# item \Setono\SyliusFeedPlugin\Feed\Model\Google\Shopping\Product #}
 <item>
 {% apply spaceless %}
 {% apply setono_sylius_feed_remove_empty_tags %}
@@ -10,7 +10,7 @@
     {% for additionalImageLink in item.additionalImageLinks %}
         <g:additional_image_link>{{ additionalImageLink|e }}</g:additional_image_link>
     {% endfor %}
-    <g:availability>{{ item.availability|e }}</g:availability>
+    <g:availability>{{ item.availability.value|e }}</g:availability>
     <g:price>{{ item.price|e }}</g:price>
     <g:sale_price>{{ item.salePrice|e }}</g:sale_price>
     <g:sale_price_effective_date>{{ item.salePriceEffectiveDate|e }}</g:sale_price_effective_date>
@@ -18,7 +18,7 @@
     <g:gtin>{{ item.gtin|e }}</g:gtin>
     <g:mpn>{{ item.mpn|e }}</g:mpn>
     {% if item.identifierExists is same as(false) %}<g:identifier_exists>false</g:identifier_exists>{% endif %}
-    <g:condition>{{ item.condition|e }}</g:condition>
+    <g:condition>{{ item.condition.value|e }}</g:condition>
     <g:item_group_id>{{ item.itemGroupId|e }}</g:item_group_id>
     <g:google_product_category>{{ item.googleProductCategory|e }}</g:google_product_category>
     <g:product_type>{{ item.productType|e }}</g:product_type>

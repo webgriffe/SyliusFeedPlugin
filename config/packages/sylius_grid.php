@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator) {
                         'type' => 'twig',
                         'label' => 'setono_sylius_feed.ui.state',
                         'options' => [
-                            'template' => '@SetonoSyliusFeedPlugin/Admin/Feed/Grid/Field/state.html.twig',
+                            'template' => '@SetonoSyliusFeedPlugin/admin/feed/grid/field/state.html.twig',
                         ],
                     ],
                 ],

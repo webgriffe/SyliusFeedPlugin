@@ -1,0 +1,8 @@
+<form action="{{ path('setono_sylius_feed_admin_feed_delete', {'id': hookable_metadata.context.resource.id}) }}" method="POST">
+    <input type="hidden" name="_method" value="DELETE" />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token(hookable_metadata.context.resource.id) }}" />
+    <button type="submit" class="dropdown-item" {{ sylius_test_html_attribute('feed-actions-delete') }}>
+        {{ ux_icon('tabler:trash-x', {'class': 'icon dropdown-item-icon'}) }}
+        {{ 'sylius.ui.delete'|trans }}
+    </button>
+</form>
