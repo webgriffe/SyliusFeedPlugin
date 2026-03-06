@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\SyliusFeedPlugin\Generator;
 
-use InvalidArgumentException;
-use League\Flysystem\FilesystemInterface;
 use League\Flysystem\FilesystemOperator;
 use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use SplFileInfo;
@@ -31,26 +29,11 @@ final class TemporaryFeedPathGenerator implements FeedPathGeneratorInterface
         return new SplFileInfo($dir->getPathname() . '/' . self::BASE_FILENAME);
     }
 
-    /**
-     * @param FilesystemInterface|FilesystemOperator $filesystem
-     */
-    public static function getPartialFile(SplFileInfo $dir, $filesystem): SplFileInfo
+    public static function getPartialFile(SplFileInfo $dir, FilesystemOperator $filesystem): SplFileInfo
     {
-        if (interface_exists(FilesystemInterface::class) && $filesystem instanceof FilesystemInterface) {
-            do {
-                $path = $dir->getPathname() . '/' . uniqid('partial-', true);
-            } while ($filesystem->has($path));
-        } elseif ($filesystem instanceof FilesystemOperator) {
-            do {
-                $path = $dir->getPathname() . '/' . uniqid('partial-', true);
-            } while ($filesystem->fileExists($path));
-        } else {
-            throw new InvalidArgumentException(sprintf(
-                'The filesystem must be an instance of %s or %s',
-                FilesystemInterface::class,
-                FilesystemOperator::class,
-            ));
-        }
+        do {
+            $path = $dir->getPathname() . '/' . uniqid('partial-', true);
+        } while ($filesystem->fileExists($path));
 
         return new SplFileInfo($path);
     }

@@ -36,7 +36,7 @@ class ViolationRepository extends EntityRepository implements ViolationRepositor
         return $res;
     }
 
-    public function createQueryBuilderByFeed($feed): QueryBuilder
+    public function createQueryBuilderByFeed(mixed $feed): QueryBuilder
     {
         Assert::scalar($feed);
 

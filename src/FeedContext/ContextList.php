@@ -8,7 +8,7 @@ use ArrayIterator;
 use IteratorAggregate;
 
 /**
- * @implements IteratorAggregate<array|object>
+ * @implements IteratorAggregate<array-key, array|object>
  */
 final class ContextList implements IteratorAggregate, ContextListInterface
 {
@@ -37,6 +37,9 @@ final class ContextList implements IteratorAggregate, ContextListInterface
         return count($this->contexts);
     }
 
+    /**
+     * @return ArrayIterator<array-key, array|object>
+     */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->contexts);

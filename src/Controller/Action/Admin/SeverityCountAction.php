@@ -16,7 +16,7 @@ final readonly class SeverityCountAction
     ) {
     }
 
-    public function __invoke(int $feed = null): Response
+    public function __invoke(?int $feed = null): Response
     {
         $severityCounts = $this->violationRepository->findCountsGroupedBySeverity($feed);
 

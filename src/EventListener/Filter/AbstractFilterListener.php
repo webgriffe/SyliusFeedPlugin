@@ -45,6 +45,9 @@ abstract class AbstractFilterListener
         return $aliases[0];
     }
 
+    /**
+     * @return ClassMetadata<object>
+     */
     protected function getClassMetadata(QueryBuilderEvent $event): ClassMetadata
     {
         $queryBuilder = $event->getQueryBuilder();

@@ -34,9 +34,9 @@ use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Core\Model\TaxonInterface;
 use Sylius\Component\Inventory\Checker\AvailabilityCheckerInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
-use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslationInterface;
 use Sylius\Component\Taxonomy\Model\TaxonTranslationInterface;
+use Sylius\Resource\Model\TranslatableInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
@@ -50,8 +50,13 @@ class ProductItemContext implements ItemContextInterface
     ) {
     }
 
-    public function getContextList(object $product, ChannelInterface $channel, LocaleInterface $locale, FeedInterface $feed = null): ContextListInterface
-    {
+    public function getContextList(
+        object $object,
+        ChannelInterface $channel,
+        LocaleInterface $locale,
+        ?FeedInterface $feed = null,
+    ): ContextListInterface {
+        $product = $object;
         if (!$product instanceof ProductInterface) {
             throw new InvalidArgumentException(sprintf(
                 'The class %s is not an instance of %s',
@@ -66,6 +71,7 @@ class ProductItemContext implements ItemContextInterface
         } else {
             $productType = $this->getProductType($product, $locale, $excludeRootTaxon);
         }
+        Assert::isInstanceOf($product, TranslatableInterface::class);
 
         /** @var ProductTranslationInterface|null $translation */
         $translation = $this->getTranslation($product, (string) $locale->getCode());
@@ -89,8 +95,8 @@ class ProductItemContext implements ItemContextInterface
             }
 
             $data->setCondition(
-                $product instanceof ConditionAwareInterface ?
-                    Condition::from($product->getCondition()) : Condition::new,
+                $product instanceof ConditionAwareInterface && ($condition = $product->getCondition()) !== null ?
+                    Condition::from((string) $condition) : Condition::new,
             );
 
             if (null !== $productType) {
@@ -247,7 +253,7 @@ class ProductItemContext implements ItemContextInterface
             return null;
         }
 
-        return new Price($price, $baseCurrency);
+        return new Price($price, (string) $baseCurrency->getCode());
     }
 
     private function getProductType(ProductInterface $product, LocaleInterface $locale, bool $excludeRoot = false): ?string
@@ -255,15 +261,15 @@ class ProductItemContext implements ItemContextInterface
         if ($product->getMainTaxon() !== null) {
             $taxon = $product->getMainTaxon();
         } elseif (count($product->getTaxons()) > 0) {
-            /** @var TaxonInterface $taxon */
             $taxon = $product->getTaxons()->first();
         } else {
             return null;
         }
+        Assert::isInstanceOf($taxon, TaxonInterface::class);
 
         $breadcrumbs = [];
         array_unshift($breadcrumbs, $taxon);
-        for ($breadcrumb = $taxon->getParent(); null !== $breadcrumb; $breadcrumb = $breadcrumb->getParent()) {
+        for ($breadcrumb = $taxon->getParent(); $breadcrumb instanceof TaxonInterface; $breadcrumb = $breadcrumb->getParent()) {
             array_unshift($breadcrumbs, $breadcrumb);
         }
 
@@ -274,11 +280,10 @@ class ProductItemContext implements ItemContextInterface
         }
 
         return implode(' > ', array_map(function (TaxonInterface $breadcrumb) use ($locale): string {
-            /** @var TaxonTranslationInterface|null $translation */
             $translation = $this->getTranslation($breadcrumb, (string) $locale->getCode());
 
             // Fallback to default locale
-            return null !== $translation ? (string) $translation->getName() : (string) $breadcrumb->getName();
+            return $translation instanceof TaxonTranslationInterface ? (string) $translation->getName() : (string) $breadcrumb->getName();
         }, $breadcrumbs));
     }
 }

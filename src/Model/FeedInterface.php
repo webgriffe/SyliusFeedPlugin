@@ -7,8 +7,8 @@ namespace Setono\SyliusFeedPlugin\Model;
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Channel\Model\ChannelsAwareInterface;
 use Sylius\Component\Resource\Model\CodeAwareInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\ToggleableInterface;
+use Sylius\Resource\Model\ResourceInterface;
 
 interface FeedInterface extends ChannelsAwareInterface, CodeAwareInterface, ResourceInterface, ToggleableInterface
 {
@@ -45,7 +45,7 @@ interface FeedInterface extends ChannelsAwareInterface, CodeAwareInterface, Reso
     public function resetBatches(): void;
 
     /**
-     * @return Collection|ViolationInterface[]
+     * @return Collection<array-key, ViolationInterface>|ViolationInterface[]
      */
     public function getViolations(): Collection;
 

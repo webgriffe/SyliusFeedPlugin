@@ -10,11 +10,11 @@ use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 
 trait GetChannelTrait
 {
+    /** @var ChannelRepositoryInterface<ChannelInterface> */
     private ChannelRepositoryInterface $channelRepository;
 
     private function getChannel(int $id): ChannelInterface
     {
-        /** @var ChannelInterface|null $obj */
         $obj = $this->channelRepository->find($id);
 
         if (null === $obj) {

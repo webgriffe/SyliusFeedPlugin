@@ -11,7 +11,6 @@ use const JSON_PRESERVE_ZERO_FRACTION;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
-use League\Flysystem\FilesystemInterface;
 use League\Flysystem\FilesystemOperator;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -28,8 +27,8 @@ use Setono\SyliusFeedPlugin\Model\ViolationInterface;
 use Setono\SyliusFeedPlugin\Registry\FeedTypeRegistryInterface;
 use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Setono\SyliusFeedPlugin\Workflow\FeedGraph;
-use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -42,7 +41,6 @@ use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Throwable;
 use Twig\Environment;
-use Webmozart\Assert\Assert;
 
 final class GenerateBatchHandler
 {
@@ -52,8 +50,9 @@ final class GenerateBatchHandler
 
     private RequestContext $initialRequestContext;
 
-    private FilesystemInterface|FilesystemOperator $filesystem;
-
+    /**
+     * @param ChannelRepositoryInterface<ChannelInterface> $channelRepository
+     */
     public function __construct(
         FeedRepositoryInterface $feedRepository,
         ChannelRepositoryInterface $channelRepository,
@@ -61,7 +60,7 @@ final class GenerateBatchHandler
         private readonly ObjectManager $feedManager,
         private readonly FeedTypeRegistryInterface $feedTypeRegistry,
         private readonly Environment $twig,
-        $filesystem,
+        private readonly FilesystemOperator $filesystem,
         private readonly FeedPathGeneratorInterface $temporaryFeedPathGenerator,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly Registry $workflowRegistry,
@@ -74,17 +73,6 @@ final class GenerateBatchHandler
         $this->feedRepository = $feedRepository;
         $this->channelRepository = $channelRepository;
         $this->localeRepository = $localeRepository;
-        if (interface_exists(FilesystemInterface::class) && $filesystem instanceof FilesystemInterface) {
-            $this->filesystem = $filesystem;
-        } elseif ($filesystem instanceof FilesystemOperator) {
-            $this->filesystem = $filesystem;
-        } else {
-            throw new InvalidArgumentException(sprintf(
-                'The filesystem must be an instance of %s or %s',
-                FilesystemInterface::class,
-                FilesystemOperator::class,
-            ));
-        }
     }
 
     public function __invoke(GenerateBatch $message): void
@@ -183,18 +171,10 @@ final class GenerateBatchHandler
             }
 
             $dir = $this->temporaryFeedPathGenerator->generate($feed, (string) $channel->getCode(), (string) $locale->getCode());
-            $filesystem = $this->filesystem;
-            $path = TemporaryFeedPathGenerator::getPartialFile($dir, $filesystem);
+            $path = TemporaryFeedPathGenerator::getPartialFile($dir, $this->filesystem);
 
-            if (interface_exists(FilesystemInterface::class) && $filesystem instanceof FilesystemInterface) {
-                $res = $filesystem->writeStream((string) $path, $stream);
-                fclose($stream);
-
-                Assert::true($res, 'An error occurred when trying to write a feed item');
-            } else {
-                $filesystem->writeStream((string) $path, $stream);
-                fclose($stream);
-            }
+            $this->filesystem->writeStream((string) $path, $stream);
+            fclose($stream);
 
             $this->feedManager->flush();
             $this->feedManager->clear();

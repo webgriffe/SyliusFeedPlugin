@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusFeedPlugin\EventListener;
 
-use InvalidArgumentException;
-use League\Flysystem\FilesystemInterface;
 use League\Flysystem\FilesystemOperator;
-use League\Flysystem\RootViolationException;
 use League\Flysystem\UnableToDeleteDirectory;
 use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Workflow\FeedGraph;
@@ -15,27 +12,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\TransitionEvent;
 use Webmozart\Assert\Assert;
 
-final class DeleteGeneratedFilesSubscriber implements EventSubscriberInterface
+final readonly class DeleteGeneratedFilesSubscriber implements EventSubscriberInterface
 {
-    /** @var FilesystemInterface|FilesystemOperator */
-    private $filesystem;
-
-    /**
-     * @param FilesystemInterface|FilesystemOperator $filesystem
-     */
-    public function __construct($filesystem)
+    public function __construct(private FilesystemOperator $filesystem)
     {
-        if (interface_exists(FilesystemInterface::class) && $filesystem instanceof FilesystemInterface) {
-            $this->filesystem = $filesystem;
-        } elseif ($filesystem instanceof FilesystemOperator) {
-            $this->filesystem = $filesystem;
-        } else {
-            throw new InvalidArgumentException(sprintf(
-                'The filesystem must be an instance of %s or %s',
-                FilesystemInterface::class,
-                FilesystemOperator::class,
-            ));
-        }
     }
 
     public static function getSubscribedEvents(): array
@@ -55,13 +35,8 @@ final class DeleteGeneratedFilesSubscriber implements EventSubscriberInterface
         Assert::isInstanceOf($feed, FeedInterface::class);
 
         try {
-            $filesystem = $this->filesystem;
-            if (interface_exists(FilesystemInterface::class) && $filesystem instanceof FilesystemInterface) {
-                $filesystem->deleteDir($feed->getCode());
-            } else {
-                $filesystem->deleteDirectory($feed->getCode());
-            }
-        } catch (RootViolationException|UnableToDeleteDirectory) {
+            $this->filesystem->deleteDirectory($feed->getCode());
+        } catch (UnableToDeleteDirectory) {
         }
     }
 }

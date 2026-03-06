@@ -7,7 +7,6 @@ namespace Setono\SyliusFeedPlugin\Message\Handler;
 use Doctrine\Persistence\ObjectManager;
 use InvalidArgumentException;
 use League\Flysystem\DirectoryListing;
-use League\Flysystem\FilesystemInterface;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
 use Psr\Log\LoggerInterface;
@@ -32,33 +31,17 @@ final class FinishGenerationHandler
 {
     use GetFeedTrait;
 
-    private FilesystemInterface|FilesystemOperator $filesystem;
-
-    /**
-     * @param FilesystemInterface|FilesystemOperator $filesystem
-     */
     public function __construct(
         FeedRepositoryInterface $feedRepository,
-        private ObjectManager $feedManager,
-        $filesystem,
+        private readonly ObjectManager $feedManager,
+        private readonly FilesystemOperator $filesystem,
         private readonly Registry $workflowRegistry,
-        private Environment $twig,
+        private readonly Environment $twig,
         private readonly FeedTypeRegistryInterface $feedTypeRegistry,
         private readonly FeedPathGeneratorInterface $temporaryFeedPathGenerator,
         private readonly LoggerInterface $logger,
     ) {
         $this->feedRepository = $feedRepository;
-        if (interface_exists(FilesystemInterface::class) && $filesystem instanceof FilesystemInterface) {
-            $this->filesystem = $filesystem;
-        } elseif ($filesystem instanceof FilesystemOperator) {
-            $this->filesystem = $filesystem;
-        } else {
-            throw new InvalidArgumentException(sprintf(
-                'The filesystem must be an instance of %s or %s',
-                FilesystemInterface::class,
-                FilesystemOperator::class,
-            ));
-        }
     }
 
     public function __invoke(FinishGeneration $message): void
@@ -123,16 +106,7 @@ final class FinishGenerationHandler
 
                     fwrite($batchStream, $feedEnd);
 
-                    if (interface_exists(FilesystemInterface::class) && $filesystem instanceof FilesystemInterface) {
-                        /** @var resource|false $res */
-                        $res = $filesystem->writeStream((string) TemporaryFeedPathGenerator::getBaseFile($dir), $batchStream);
-
-                        if (false === $res) {
-                            throw new RuntimeException('An error occurred when trying to write the finished feed write');
-                        }
-                    } else {
-                        $filesystem->writeStream((string) TemporaryFeedPathGenerator::getBaseFile($dir), $batchStream);
-                    }
+                    $filesystem->writeStream((string) TemporaryFeedPathGenerator::getBaseFile($dir), $batchStream);
 
                     // tries to close the file pointer although it may already have been closed by flysystem
                     fclose($batchStream);
