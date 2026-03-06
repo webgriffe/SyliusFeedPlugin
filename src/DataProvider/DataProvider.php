@@ -41,9 +41,6 @@ class DataProvider implements DataProviderInterface
         return $this->class;
     }
 
-    /**
-     * @return iterable<CollectionBatchInterface>
-     */
     public function getBatches(ChannelInterface $channel, LocaleInterface $locale): iterable
     {
         yield from $this->getBatcher($channel, $locale)->getBatches($this->batchSize);

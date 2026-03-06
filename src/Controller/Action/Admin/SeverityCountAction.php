@@ -5,25 +5,24 @@ declare(strict_types=1);
 namespace Setono\SyliusFeedPlugin\Controller\Action\Admin;
 
 use Setono\SyliusFeedPlugin\Repository\ViolationRepositoryInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
-final readonly class SeverityCountAction
+final class SeverityCountAction extends AbstractController implements SeverityCountActionInterface
 {
     public function __construct(
-        private ViolationRepositoryInterface $violationRepository,
-        private Environment $twig,
+        private readonly ViolationRepositoryInterface $violationRepository,
     ) {
     }
 
-    public function __invoke(?int $feed = null): Response
+    #[\Override]
+    public function __invoke(Request $request, ?int $feed = null): Response
     {
         $severityCounts = $this->violationRepository->findCountsGroupedBySeverity($feed);
 
-        $content = $this->twig->render('@SetonoSyliusFeedPlugin/Admin/Violation/severity_count.html.twig', [
+        return $this->render('@SetonoSyliusFeedPlugin/Admin/Violation/severity_count.html.twig', [
             'severityCounts' => $severityCounts,
         ]);
-
-        return new Response($content);
     }
 }

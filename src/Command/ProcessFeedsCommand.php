@@ -24,6 +24,6 @@ final class ProcessFeedsCommand extends Command
         $this->feedProcessor->setLogger(new ConsoleLogger($output));
         $this->feedProcessor->process();
 
-        return 0;
+        return self::SUCCESS;
     }
 }
