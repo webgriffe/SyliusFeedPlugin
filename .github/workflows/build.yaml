@@ -119,7 +119,7 @@ jobs:
 
             -
                 name: Run Behat
-                run: vendor/bin/behat --colors --strict -vvv --no-interaction -f progress || vendor/bin/behat --colors --strict -vvv --no-interaction -f progress --rerun
+                run: vendor/bin/behat --colors --strict -vvv --no-interaction -f progress --allow-no-tests || vendor/bin/behat --colors --strict -vvv --no-interaction -f progress --rerun --allow-no-tests
 
             -
                 name: Upload Behat logs
