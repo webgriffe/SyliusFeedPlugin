@@ -38,6 +38,7 @@ final class RegisterFilesystemPass implements CompilerPassInterface
             }
 
             $definitionClass = $container->getDefinition($parameterValue)->getClass();
+            Assert::string($definitionClass);
             if (!is_a($definitionClass, FilesystemOperator::class, true)) {
                 throw new InvalidDefinitionException(sprintf(
                     'The config parameter "%s" references a service %s, which is not an instance of %s. Fix this by creating a valid service that implements %s.',

@@ -21,9 +21,8 @@ final class SeverityCountComponent
     ) {
     }
 
-    public function __invoke()
+    public function __invoke(): void
     {
-        // TODO: Implement __invoke() method.
     }
 
     /**
