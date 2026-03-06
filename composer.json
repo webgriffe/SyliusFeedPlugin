@@ -12,8 +12,8 @@
         "php": "^8.2",
         "ext-json": "*",
         "sylius/sylius": "^2.0",
-        "webgriffe/doctrine-orm-batcher": "^1.0.0-alpha",
-        "webgriffe/doctrine-orm-batcher-bundle": "^1.0.0-alpha"
+        "webgriffe/doctrine-orm-batcher": "^1.0.0",
+        "webgriffe/doctrine-orm-batcher-bundle": "^1.0.0"
     },
     "require-dev": {
         "behat/behat": "^3.16",
