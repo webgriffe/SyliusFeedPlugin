@@ -55,20 +55,19 @@ return static function (ContainerConfigurator $containerConfigurator) {
                     'template' => '@SetonoSyliusFeedPlugin/admin/feed/show/content/sections/channel_urls.html.twig',
                     'priority' => 200,
                 ],
-                'general' => [
-                    'template' => '@SetonoSyliusFeedPlugin/admin/feed/show/content/sections/general.html.twig',
-                    'priority' => 100,
-                ],
                 'violations' => [
                     'template' => '@SetonoSyliusFeedPlugin/admin/feed/show/content/sections/violations.html.twig',
                     'priority' => 0,
                 ],
             ],
 
-            'sylius_admin.feed.show.content.sections.general' => [
-                'name' => [
-                    'template' => '@SetonoSyliusFeedPlugin/admin/feed/show/content/sections/general/name.html.twig',
-                    'priority' => 100,
+            'sylius_admin.feed.show.content.sections.violations' => [
+                'severity_count' => [
+                    'component' => 'setono_sylius_feed:violation:severity_count',
+                    'props' => [
+                        'feed' => '@=_context.feed.getId()',
+                        'template' => '@SetonoSyliusFeedPlugin/admin/feed/show/component/severity_count.html.twig',
+                    ],
                 ],
             ],
         ],

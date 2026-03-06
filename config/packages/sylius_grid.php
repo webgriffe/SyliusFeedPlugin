@@ -34,11 +34,11 @@ return static function (ContainerConfigurator $containerConfigurator) {
                         ],
                     ],
                     'item' => [
-                        'update' => [
-                            'type' => 'update',
-                        ],
                         'show' => [
                             'type' => 'show',
+                        ],
+                        'update' => [
+                            'type' => 'update',
                         ],
                         'delete' => [
                             'type' => 'delete',
@@ -59,7 +59,7 @@ return static function (ContainerConfigurator $containerConfigurator) {
                         ],
                     ],
                 ],
-                'limits' => [200, 100, 500, 1000],
+                'limits' => [100, 200, 500, 1000],
                 'fields' => [
                     'severity' => [
                         'type' => 'string',
@@ -73,7 +73,21 @@ return static function (ContainerConfigurator $containerConfigurator) {
                         'type' => 'twig',
                         'label' => 'setono_sylius_feed.ui.data',
                         'options' => [
-                            'template' => '@SetonoSyliusFeedPlugin/Admin/Violation/Grid/Field/data.html.twig',
+                            'template' => '@SetonoSyliusFeedPlugin/admin/violation/grid/field/data.html.twig',
+                        ],
+                    ],
+                ],
+                'filters' => [
+                    'severity' => [
+                        'type' => 'select',
+                        'label' => 'setono_sylius_feed.ui.severity',
+                        'form_options' => [
+                            'choices' => [
+                                'setono_sylius_feed.ui.severities.error' => 'error',
+                                'setono_sylius_feed.ui.severities.warning' => 'warning',
+                                'setono_sylius_feed.ui.severities.notice' => 'notice',
+                            ],
+                            'multiple' => false,
                         ],
                     ],
                 ],

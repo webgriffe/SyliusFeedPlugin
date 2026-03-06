@@ -15,27 +15,30 @@
                     <tbody>
                         {% for channel in feed.channels %}
                             {% for locale in channel.locales %}
+                                {% set feedUrl = setono_sylius_feed_generate_feed_url(feed, channel, locale) %}
+                                {% set feedbackId = 'feed-link-copied-' ~ loop.parent.loop.index ~ '-' ~ loop.index %}
                                 <tr>
                                     <td>{{ channel.name }}</td>
                                     <td>{{ locale.name }}</td>
                                     <td>
-                                        <div class="input-group"
-                                             data-controller="setono--sylius-feed-plugin--copy"
-                                             data-action="click->setono--sylius-feed-plugin--copy#copy">
+                                        <div class="input-group">
                                             <input type="text"
-                                                   class="form-control"
-                                                   value="{{ setono_sylius_feed_generate_feed_url(feed, channel, locale) }}"
+                                                   class="form-control form-control-sm font-monospace"
+                                                   value="{{ feedUrl }}"
                                                    readonly
-                                                   data-setono--sylius-feed-plugin--copy-target="input">
-                                            <button class="btn btn-outline-secondary" type="button"
+                                                   aria-label="{{ 'setono_sylius_feed.ui.link'|trans }}">
+                                            <button class="btn btn-outline-secondary"
+                                                    type="button"
+                                                    data-copy-url="{{ feedUrl }}"
+                                                    data-copy-feedback="{{ feedbackId }}"
                                                     title="{{ 'setono_sylius_feed.ui.click_to_copy'|trans }}">
-                                                {{ ux_icon('tabler:copy') }}
+                                                {{ ux_icon('tabler:copy', { class: 'icon' }) }}
                                             </button>
-                                            <span class="ms-2 align-self-center badge bg-success d-none"
-                                                  data-setono--sylius-feed-plugin--copy-target="feedback">
-                                                {{ ux_icon('tabler:check') }} {{ 'setono_sylius_feed.ui.link_copied'|trans }}
-                                            </span>
                                         </div>
+                                        <span id="{{ feedbackId }}" class="d-none text-success small mt-1 d-flex align-items-center gap-1">
+                                            {{ ux_icon('tabler:check', { class: 'icon icon-sm' }) }}
+                                            {{ 'setono_sylius_feed.ui.link_copied'|trans }}
+                                        </span>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -43,7 +46,7 @@
                     </tbody>
                 </table>
             {% else %}
-                <div class="alert alert-info">
+                <div class="alert alert-info" role="alert">
                     <h4 class="alert-title">{{ 'setono_sylius_feed.ui.unprocessed_feed_header'|trans }}</h4>
                     <p class="text-secondary mt-1 mb-0">{{ 'setono_sylius_feed.ui.unprocessed_feed_body'|trans }}</p>
                 </div>

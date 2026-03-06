@@ -1,0 +1,19 @@
+{# @var \Setono\SyliusFeedPlugin\Twig\Component\SeverityCountComponent this #}
+
+{% set colorMap = { 'error': 'danger', 'warning': 'warning', 'notice': 'info' } %}
+
+<div class="row g-3">
+    {% for severityCount in this.counts %}
+        {% set color = colorMap[severityCount.severity]|default('secondary') %}
+        <div class="col-auto">
+            <div class="card card-sm border-{{ color }}">
+                <div class="card-body text-center px-4 py-3">
+                    <div class="h1 mb-1 text-{{ color }}">{{ severityCount.count }}</div>
+                    <div class="text-secondary text-uppercase fw-medium" style="font-size: .6875rem; letter-spacing: .04em">
+                        {{ ('setono_sylius_feed.ui.severities.' ~ severityCount.severity)|trans }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

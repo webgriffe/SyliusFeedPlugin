@@ -1,9 +1,17 @@
 {% set feed = hookable_metadata.context.resource %}
 
 {% if feed.violations|length > 0 %}
-    <h2 class="ui header">{{ 'setono_sylius_feed.ui.violation_summary'|trans }}</h2>
-
-    <p>{{ 'setono_sylius_feed.ui.view_all_violations'|trans({'%path%' : path('setono_sylius_feed_admin_feed_violations_index', {'id' : feed.id})})|raw }}</p>
-
-    {{ render(controller('setono_sylius_feed.controller.action.admin.severity_count', {'feed': feed.id})) }}
+    <div class="mb-2">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ 'setono_sylius_feed.ui.violation_summary'|trans }}</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-secondary">
+                    {{ 'setono_sylius_feed.ui.view_all_violations'|trans({'%path%' : path('setono_sylius_feed_admin_feed_violations_index', {'id' : feed.id})})|raw }}
+                </p>
+                {% hook 'violations' with { feed: feed } %}
+            </div>
+        </div>
+    </div>
 {% endif %}

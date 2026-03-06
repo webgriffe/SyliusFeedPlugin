@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusFeedPlugin\Twig;
 
 use Setono\SyliusFeedPlugin\Model\FeedInterface;
+use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,6 +19,7 @@ final class Extension extends AbstractExtension
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly FeedRepositoryInterface $feedRepository,
     ) {
     }
 
@@ -32,7 +34,13 @@ final class Extension extends AbstractExtension
     {
         return [
             new TwigFunction('setono_sylius_feed_generate_feed_url', $this->generateFeedUrl(...)),
+            new TwigFunction('setono_sylius_feed_find_feed', $this->findFeed(...)),
         ];
+    }
+
+    public function findFeed(int $id): ?FeedInterface
+    {
+        return $this->feedRepository->find($id);
     }
 
     public function removeEmptyTags(string $xml): string
@@ -43,7 +51,6 @@ final class Extension extends AbstractExtension
     public function generateFeedUrl(FeedInterface $feed, ChannelInterface $channel, LocaleInterface $locale): string
     {
         $path = $this->urlGenerator->generate('setono_sylius_feed_shop_feed_show', [
-            '_locale' => $locale->getCode(),
             'code' => $feed->getCode(),
         ]);
 

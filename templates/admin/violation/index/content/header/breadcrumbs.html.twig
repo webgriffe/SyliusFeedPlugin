@@ -1,0 +1,11 @@
+{% from '@SyliusAdmin/shared/helper/breadcrumbs.html.twig' import breadcrumbs %}
+
+{% set feedId = app.request.attributes.get('id') %}
+{% set feed = setono_sylius_feed_find_feed(feedId) %}
+
+{{ breadcrumbs([
+    { name: 'sylius.ui.dashboard', url: path('sylius_admin_dashboard') },
+    { name: 'setono_sylius_feed.ui.feeds', url: path('setono_sylius_feed_admin_feed_index') },
+    feed is not null ? { name: feed.name, url: path('setono_sylius_feed_admin_feed_show', { id: feedId }) } : {},
+    { name: 'setono_sylius_feed.ui.violations', active: true },
+]) }}

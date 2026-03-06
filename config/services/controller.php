@@ -6,8 +6,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Setono\SyliusFeedPlugin\Controller\Action\Admin\ProcessFeedAction;
 use Setono\SyliusFeedPlugin\Controller\Action\Admin\ProcessFeedActionInterface;
-use Setono\SyliusFeedPlugin\Controller\Action\Admin\SeverityCountAction;
-use Setono\SyliusFeedPlugin\Controller\Action\Admin\SeverityCountActionInterface;
 use Setono\SyliusFeedPlugin\Controller\Action\Shop\ShowFeedAction;
 use Setono\SyliusFeedPlugin\Controller\Action\Shop\ShowFeedActionInterface;
 
@@ -25,17 +23,6 @@ return static function (ContainerConfigurator $containerConfigurator) {
     ;
 
     $services->alias(ProcessFeedActionInterface::class, 'setono_sylius_feed.controller.action.admin.process_feed');
-
-    $services->set('setono_sylius_feed.controller.action.admin.severity_count', SeverityCountAction::class)
-        ->args([
-            service('setono_sylius_feed.repository.violation'),
-        ])
-        ->call('setContainer', [service('service_container')])
-        ->tag('controller.service_arguments')
-        ->tag('container.service_subscriber')
-    ;
-
-    $services->alias(SeverityCountActionInterface::class, 'setono_sylius_feed.controller.action.admin.severity_count');
 
     $services->set('setono_sylius_feed.controller.action.shop.show_feed', ShowFeedAction::class)
         ->args([
