@@ -13,8 +13,6 @@ use Setono\SyliusFeedPlugin\Feed\Model\Google\Shopping\Product;
 use Setono\SyliusFeedPlugin\FeedContext\ContextList;
 use Setono\SyliusFeedPlugin\FeedContext\ContextListInterface;
 use Setono\SyliusFeedPlugin\FeedContext\ItemContextInterface;
-use Setono\SyliusFeedPlugin\Model\BrandAwareInterface;
-use Setono\SyliusFeedPlugin\Model\ColorAwareInterface;
 use Setono\SyliusFeedPlugin\Model\ConditionAwareInterface;
 use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Model\GtinAwareInterface;
@@ -22,7 +20,6 @@ use Setono\SyliusFeedPlugin\Model\LocalizedBrandAwareInterface;
 use Setono\SyliusFeedPlugin\Model\LocalizedColorAwareInterface;
 use Setono\SyliusFeedPlugin\Model\LocalizedSizeAwareInterface;
 use Setono\SyliusFeedPlugin\Model\MpnAwareInterface;
-use Setono\SyliusFeedPlugin\Model\SizeAwareInterface;
 use Setono\SyliusFeedPlugin\Model\TaxonPathAwareInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ImageInterface;
@@ -41,20 +38,22 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
 
-class ProductItemContext implements ItemContextInterface
+final readonly class ProductItemContext implements ItemContextInterface
 {
     public function __construct(
-        private readonly RouterInterface $router,
-        private readonly CacheManager $cacheManager,
-        private readonly AvailabilityCheckerInterface $availabilityChecker,
+        private RouterInterface $router,
+        private CacheManager $cacheManager,
+        private AvailabilityCheckerInterface $availabilityChecker,
+        private bool $excludeRootTaxon,
     ) {
     }
 
+    #[\Override]
     public function getContextList(
         object $object,
         ChannelInterface $channel,
         LocaleInterface $locale,
-        ?FeedInterface $feed = null,
+        FeedInterface $feed,
     ): ContextListInterface {
         $product = $object;
         if (!$product instanceof ProductInterface) {
@@ -65,11 +64,10 @@ class ProductItemContext implements ItemContextInterface
             ));
         }
 
-        $excludeRootTaxon = false; // @todo Make it configurable
         if ($product instanceof TaxonPathAwareInterface) {
-            $productType = $product->getTaxonPath($locale, $excludeRootTaxon);
+            $productType = $product->getTaxonPath($locale, $this->excludeRootTaxon);
         } else {
-            $productType = $this->getProductType($product, $locale, $excludeRootTaxon);
+            $productType = $this->getProductType($product, $locale, $this->excludeRootTaxon);
         }
         Assert::isInstanceOf($product, TranslatableInterface::class);
 
@@ -105,12 +103,8 @@ class ProductItemContext implements ItemContextInterface
 
             if ($variant instanceof LocalizedBrandAwareInterface && $variant->getBrand($locale) !== null) {
                 $data->setBrand((string) $variant->getBrand($locale));
-            } elseif ($variant instanceof BrandAwareInterface && $variant->getBrand() !== null) {
-                $data->setBrand((string) $variant->getBrand());
             } elseif ($product instanceof LocalizedBrandAwareInterface && $product->getBrand($locale) !== null) {
                 $data->setBrand((string) $product->getBrand($locale));
-            } elseif ($product instanceof BrandAwareInterface && $product->getBrand() !== null) {
-                $data->setBrand((string) $product->getBrand());
             }
 
             if ($variant instanceof GtinAwareInterface && $variant->getGtin() !== null) {
@@ -127,22 +121,14 @@ class ProductItemContext implements ItemContextInterface
 
             if ($variant instanceof LocalizedSizeAwareInterface && $variant->getSize($locale) !== null) {
                 $data->setSize((string) $variant->getSize($locale));
-            } elseif ($variant instanceof SizeAwareInterface && $variant->getSize() !== null) {
-                $data->setSize((string) $variant->getSize());
             } elseif ($product instanceof LocalizedSizeAwareInterface && $product->getSize($locale) !== null) {
                 $data->setSize((string) $product->getSize($locale));
-            } elseif ($product instanceof SizeAwareInterface && $product->getSize() !== null) {
-                $data->setSize((string) $product->getSize());
             }
 
             if ($variant instanceof LocalizedColorAwareInterface && $variant->getColor($locale) !== null) {
                 $data->setColor((string) $variant->getColor($locale));
-            } elseif ($variant instanceof ColorAwareInterface && $variant->getColor() !== null) {
-                $data->setColor((string) $variant->getColor());
             } elseif ($product instanceof LocalizedColorAwareInterface && $product->getColor($locale) !== null) {
                 $data->setColor((string) $product->getColor($locale));
-            } elseif ($product instanceof ColorAwareInterface && $product->getColor() !== null) {
-                $data->setColor((string) $product->getColor());
             }
 
             $contextList->add($data);
@@ -153,7 +139,6 @@ class ProductItemContext implements ItemContextInterface
 
     private function getTranslation(TranslatableInterface $translatable, string $locale): ?TranslationInterface
     {
-        /** @var TranslationInterface $translation */
         foreach ($translatable->getTranslations() as $translation) {
             if ($translation->getLocale() === $locale) {
                 return $translation;

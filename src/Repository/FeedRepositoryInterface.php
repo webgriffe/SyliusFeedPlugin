@@ -9,7 +9,6 @@ use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 /**
  * @template T of FeedInterface
- *
  * @extends RepositoryInterface<T>
  */
 interface FeedRepositoryInterface extends RepositoryInterface

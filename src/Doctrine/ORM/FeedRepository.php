@@ -11,7 +11,6 @@ use Webmozart\Assert\Assert;
 
 /**
  * @template T of FeedInterface
- *
  * @implements FeedRepositoryInterface<T>
  */
 class FeedRepository extends EntityRepository implements FeedRepositoryInterface
