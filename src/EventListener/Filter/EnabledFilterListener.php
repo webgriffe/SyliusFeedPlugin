@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusFeedPlugin\EventListener\Filter;
 
 use Setono\SyliusFeedPlugin\Event\QueryBuilderEvent;
-use Sylius\Component\Resource\Model\ToggleableInterface;
+use Sylius\Resource\Model\ToggleableInterface;
 
 final class EnabledFilterListener extends AbstractFilterListener
 {

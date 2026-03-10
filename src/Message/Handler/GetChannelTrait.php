@@ -17,7 +17,7 @@ trait GetChannelTrait
     {
         $obj = $this->channelRepository->find($id);
 
-        if (null === $obj) {
+        if (!$obj instanceof ChannelInterface) {
             throw new UnrecoverableMessageHandlingException(sprintf('Channel with id %s does not exist', $id));
         }
 

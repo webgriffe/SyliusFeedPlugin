@@ -6,12 +6,16 @@ namespace Setono\SyliusFeedPlugin\EventListener;
 
 use Setono\SyliusFeedPlugin\Event\BatchGeneratedEvent;
 use Setono\SyliusFeedPlugin\Message\Command\FinishGeneration;
+use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class SendFinishGenerationCommandSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @param FeedRepositoryInterface<FeedInterface> $feedRepository
+     */
     public function __construct(
         private FeedRepositoryInterface $feedRepository,
         private MessageBusInterface $commandBus,

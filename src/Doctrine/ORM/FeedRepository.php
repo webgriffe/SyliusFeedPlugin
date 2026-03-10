@@ -9,6 +9,11 @@ use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Webmozart\Assert\Assert;
 
+/**
+ * @template T of FeedInterface
+ *
+ * @implements FeedRepositoryInterface<T>
+ */
 class FeedRepository extends EntityRepository implements FeedRepositoryInterface
 {
     public function findOneByCode(string $code): ?FeedInterface

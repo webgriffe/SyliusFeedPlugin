@@ -6,6 +6,7 @@ namespace Setono\SyliusFeedPlugin\Message\Handler;
 
 use Doctrine\Persistence\ObjectManager;
 use InvalidArgumentException;
+use Sylius\Component\Locale\Model\LocaleInterface;
 use const JSON_INVALID_UTF8_IGNORE;
 use const JSON_PRESERVE_ZERO_FRACTION;
 use const JSON_PRETTY_PRINT;
@@ -29,7 +30,7 @@ use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Setono\SyliusFeedPlugin\Workflow\FeedGraph;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
@@ -51,7 +52,9 @@ final class GenerateBatchHandler
     private RequestContext $initialRequestContext;
 
     /**
+     * @param FeedRepositoryInterface<FeedInterface> $feedRepository
      * @param ChannelRepositoryInterface<ChannelInterface> $channelRepository
+     * @param RepositoryInterface<LocaleInterface> $localeRepository
      */
     public function __construct(
         FeedRepositoryInterface $feedRepository,

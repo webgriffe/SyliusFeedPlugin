@@ -6,9 +6,9 @@ namespace Setono\SyliusFeedPlugin\Model;
 
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Channel\Model\ChannelsAwareInterface;
-use Sylius\Component\Resource\Model\CodeAwareInterface;
-use Sylius\Component\Resource\Model\ToggleableInterface;
+use Sylius\Resource\Model\CodeAwareInterface;
 use Sylius\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\ToggleableInterface;
 
 interface FeedInterface extends ChannelsAwareInterface, CodeAwareInterface, ResourceInterface, ToggleableInterface
 {

@@ -7,22 +7,23 @@ namespace Setono\SyliusFeedPlugin\Factory;
 use Setono\SyliusFeedPlugin\Model\ViolationInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Resource\Factory\FactoryInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
 final readonly class ViolationFactory implements ViolationFactoryInterface
 {
-    public function __construct(private FactoryInterface $decoratedFactory)
-    {
+    /**
+     * @param FactoryInterface<ViolationInterface> $decoratedFactory
+     */
+    public function __construct(
+        private FactoryInterface $decoratedFactory,
+    ) {
     }
 
     public function createNew(): ViolationInterface
     {
-        /** @var ViolationInterface $violation */
-        $violation = $this->decoratedFactory->createNew();
-
-        return $violation;
+        return $this->decoratedFactory->createNew();
     }
 
     /**

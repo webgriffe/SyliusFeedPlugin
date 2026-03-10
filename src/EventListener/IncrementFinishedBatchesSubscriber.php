@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace Setono\SyliusFeedPlugin\EventListener;
 
 use Setono\SyliusFeedPlugin\Event\BatchGeneratedEvent;
+use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final readonly class IncrementFinishedBatchesSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private FeedRepositoryInterface $feedRepository)
-    {
+    /**
+     * @param FeedRepositoryInterface<FeedInterface> $feedRepository
+     */
+    public function __construct(
+        private FeedRepositoryInterface $feedRepository,
+    ) {
     }
 
     public static function getSubscribedEvents(): array

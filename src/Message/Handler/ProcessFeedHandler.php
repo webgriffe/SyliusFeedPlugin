@@ -22,6 +22,9 @@ final class ProcessFeedHandler
 {
     use GetFeedTrait;
 
+    /**
+     * @param FeedRepositoryInterface<FeedInterface> $feedRepository
+     */
     public function __construct(
         FeedRepositoryInterface $feedRepository,
         private readonly ObjectManager $feedManager,

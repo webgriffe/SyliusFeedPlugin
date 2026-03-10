@@ -7,6 +7,7 @@ namespace Setono\SyliusFeedPlugin\Processor;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Setono\SyliusFeedPlugin\Message\Command\ProcessFeed;
+use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -14,6 +15,9 @@ final class FeedProcessor implements FeedProcessorInterface
 {
     private LoggerInterface $logger;
 
+    /**
+     * @param FeedRepositoryInterface<FeedInterface> $feedRepository
+     */
     public function __construct(
         private readonly FeedRepositoryInterface $feedRepository,
         private readonly MessageBusInterface $commandBus,

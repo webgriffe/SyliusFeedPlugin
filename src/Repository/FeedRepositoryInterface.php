@@ -8,7 +8,9 @@ use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 /**
- * @extends RepositoryInterface<FeedInterface>
+ * @template T of FeedInterface
+ *
+ * @extends RepositoryInterface<T>
  */
 interface FeedRepositoryInterface extends RepositoryInterface
 {

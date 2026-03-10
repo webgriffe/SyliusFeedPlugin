@@ -16,6 +16,9 @@ use Twig\TwigFunction;
 
 final class Extension extends AbstractExtension
 {
+    /**
+     * @param FeedRepositoryInterface<FeedInterface> $feedRepository
+     */
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly UrlGeneratorInterface $urlGenerator,

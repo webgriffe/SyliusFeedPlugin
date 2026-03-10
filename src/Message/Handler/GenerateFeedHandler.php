@@ -13,7 +13,8 @@ use Setono\SyliusFeedPlugin\Registry\FeedTypeRegistryInterface;
 use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Component\Locale\Model\LocaleInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -24,7 +25,9 @@ final class GenerateFeedHandler
     use GetLocaleTrait;
 
     /**
+     * @param FeedRepositoryInterface<FeedInterface> $feedRepository
      * @param ChannelRepositoryInterface<ChannelInterface> $channelRepository
+     * @param RepositoryInterface<LocaleInterface> $localeRepository
      */
     public function __construct(
         FeedRepositoryInterface $feedRepository,

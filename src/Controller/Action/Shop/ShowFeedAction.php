@@ -7,6 +7,7 @@ namespace Setono\SyliusFeedPlugin\Controller\Action\Shop;
 use League\Flysystem\FilesystemOperator;
 use RuntimeException;
 use Setono\SyliusFeedPlugin\Generator\FeedPathGeneratorInterface;
+use Setono\SyliusFeedPlugin\Model\FeedInterface;
 use Setono\SyliusFeedPlugin\Repository\FeedRepositoryInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
@@ -19,8 +20,11 @@ use Symfony\Component\Mime\MimeTypesInterface;
 
 final class ShowFeedAction extends AbstractController implements ShowFeedActionInterface
 {
+    /**
+     * @param FeedRepositoryInterface<FeedInterface> $feedRepository
+     */
     public function __construct(
-        private readonly FeedRepositoryInterface $repository,
+        private readonly FeedRepositoryInterface $feedRepository,
         private readonly ChannelContextInterface $channelContext,
         private readonly LocaleContextInterface $localeContext,
         private readonly FeedPathGeneratorInterface $feedPathGenerator,
@@ -32,7 +36,7 @@ final class ShowFeedAction extends AbstractController implements ShowFeedActionI
     #[\Override]
     public function __invoke(Request $request, string $code): Response
     {
-        $feed = $this->repository->findOneByCode($code);
+        $feed = $this->feedRepository->findOneByCode($code);
         if (null === $feed) {
             throw new NotFoundHttpException(sprintf('The feed with id %s does not exist', $code));
         }

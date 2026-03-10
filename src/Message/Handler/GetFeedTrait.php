@@ -10,14 +10,14 @@ use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 
 trait GetFeedTrait
 {
+    /** @var FeedRepositoryInterface<FeedInterface> */
     private FeedRepositoryInterface $feedRepository;
 
     private function getFeed(int $id): FeedInterface
     {
-        /** @var FeedInterface|null $obj */
         $obj = $this->feedRepository->find($id);
 
-        if (null === $obj) {
+        if (!$obj instanceof FeedInterface) {
             throw new UnrecoverableMessageHandlingException(sprintf('Feed with id %s does not exist', $id));
         }
 
