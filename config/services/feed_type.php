@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator) {
     $services->set('setono_sylius_feed.feed_type.google_shopping', FeedType::class)
         ->args([
             'google_shopping',
-            '@SetonoSyliusFeedPlugin/Feed/Google/Shopping/feed.txt.twig',
+            '@SetonoSyliusFeedPlugin/feed/Google/Shopping/feed.txt.twig',
             service('setono_sylius_feed.data_provider.product'),
             service('setono_sylius_feed.feed_context.google.shopping'),
             service('setono_sylius_feed.feed_context.google.shopping.product_item'),

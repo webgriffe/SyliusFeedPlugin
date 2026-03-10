@@ -1,23 +1,44 @@
-# Sylius Feed Plugin
+<p align="center">
+    <a href="https://sylius.com" target="_blank">
+        <img src="https://demo.sylius.com/assets/shop/img/logo.png" />
+    </a>
+</p>
 
-[![Latest Version][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE)
-[![Build Status][ico-github-actions]][link-github-actions]
+<h1 align="center">Sylius Feed Plugin</h1>
 
-A plugin for creating all kinds of feeds to any given service. Do you want to create product feeds for
-your Google Merchant center? Then this is the right plugin for you.
+<p align="center">A plugin for creating all kinds of feeds to any given service. Do you want to create product feeds for
+your Google Merchant center? Then this is the right plugin for you.</p>
 
 ## Installation
 
 ### Step 1: Download the plugin
 
-Open a command console, enter your project directory and execute the following command to download the latest stable version of this plugin:
+Before starting, you should say explicitly to composer to use this fork instead of the original package. To do that, add the following to your `composer.json` file:
 
-```bash
-composer require setono/sylius-feed-plugin
+```json
+{
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/webgriffe/SyliusFeedPlugin.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/webgriffe/doctrine-orm-batcher"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/webgriffe/DoctrineORMBatcherBundle.git"
+        }
+    ]
+}
 ```
 
-This command requires you to have Composer installed globally, as explained in the [installation chapter](https://getcomposer.org/doc/00-intro.md) of the Composer documentation.
+Then, open a command console, enter your project directory and execute the following command to download the latest stable version of this plugin:
+
+```bash
+composer require webgriffe/sylius-feed-plugin ^1.0
+```
 
 ### Step 2: Enable the plugin
 
@@ -48,8 +69,12 @@ return [
 
 ```yaml
 # config/routes/setono_sylius_feed.yaml
-setono_sylius_feed:
-    resource: "@SetonoSyliusFeedPlugin/Resources/config/routing.yaml"
+setono_sylius_feed_admin:
+    resource: "@SetonoSyliusFeedPlugin/config/routes/admin.php"
+    prefix: '/%sylius_admin.path_name%'
+
+setono_sylius_feed_shop:
+    resource: "@SetonoSyliusFeedPlugin/config/routes/shop.php"
 ```
 
 If you don't use localized URLs, use this routing file instead: `@SetonoSyliusFeedPlugin/Resources/config/routing_non_localized.yaml`
@@ -59,15 +84,14 @@ If you don't use localized URLs, use this routing file instead: `@SetonoSyliusFe
 ```yaml
 # config/packages/setono_sylius_feed.yaml
 imports:
-    - { resource: "@SetonoSyliusFeedPlugin/Resources/config/app/config.yaml" }
+    - { resource: "@SetonoSyliusFeedPlugin/config/config.php" }
 ```
 
 ### Step 5: Update database schema
 
-Use Doctrine migrations to create a migration file and update the database.
+Run Doctrine migrations to update the database.
 
 ```bash
-bin/console doctrine:migrations:diff
 bin/console doctrine:migrations:migrate
 ```
 
@@ -84,7 +108,7 @@ framework:
             # Route all command messages to the async transport
             # This presumes that you have already set up an 'async' transport
             # See docs on how to set up a transport like that: https://symfony.com/doc/current/messenger.html#transports-async-queued-messages
-            'Setono\SyliusFeedPlugin\Message\Command\CommandInterface': async
+            'Setono\SyliusFeedPlugin\Message\Command\CommandInterface': main
 ```
 
 ## Usage
@@ -98,11 +122,3 @@ $ php bin/console setono:sylius-feed:process
 ```
 
 If you haven't changed any configuration, there should be a feed with your products inside the `/var/storage/setono_sylius_feed/feed` directory.
-
-
-[ico-version]: https://poser.pugx.org/setono/sylius-feed-plugin/v/stable
-[ico-license]: https://poser.pugx.org/setono/sylius-feed-plugin/license
-[ico-github-actions]: https://github.com/Setono/SyliusFeedPlugin/workflows/build/badge.svg
-
-[link-packagist]: https://packagist.org/packages/setono/sylius-feed-plugin
-[link-github-actions]: https://github.com/Setono/SyliusFeedPlugin/actions

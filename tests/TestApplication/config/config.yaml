@@ -17,3 +17,8 @@ doctrine:
                         type: attribute
                         dir: '%kernel.project_dir%/../../../tests/TestApplication/src/Entity'
                         prefix: Tests\Setono\SetonoSyliusFeedPlugin
+
+framework:
+    messenger:
+        routing:
+            'Setono\SyliusFeedPlugin\Message\Command\CommandInterface': main
