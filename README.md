@@ -1,6 +1,6 @@
 <p align="center">
-    <a href="https://sylius.com" target="_blank">
-        <img src="https://demo.sylius.com/assets/shop/img/logo.png" />
+    <a href="https://www.webgriffe.com" target="_blank">
+        <img src="https://sylius.com/wp-content/uploads/2018/08/webgriffe_logo.png" height="120" />
     </a>
 </p>
 
