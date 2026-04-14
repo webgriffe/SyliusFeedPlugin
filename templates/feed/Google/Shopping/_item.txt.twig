@@ -1,7 +1,6 @@
-{# item \Setono\SyliusFeedPlugin\Feed\Model\Google\Shopping\Product #}
+{#- item \Setono\SyliusFeedPlugin\Feed\Model\Google\Shopping\Product -#}
+{% apply spaceless %}{% apply setono_sylius_feed_remove_empty_tags %}
 <item>
-{% apply spaceless %}
-{% apply setono_sylius_feed_remove_empty_tags %}
     <g:id>{{- item.id|e -}}</g:id>
     <title><![CDATA[{{- item.title -}}]]></title>
     <g:description><![CDATA[{{- item.description -}}]]></g:description>
@@ -28,6 +27,5 @@
     {% for idx, customLabel in item.customLabels %}
         <g:custom_label_{{- idx -}}>{{- customLabel|e -}}</g:custom_label_{{- idx -}}>
     {% endfor %}
-{% endapply %}
-{% endapply %}
 </item>
+{% endapply %}{% endapply %}

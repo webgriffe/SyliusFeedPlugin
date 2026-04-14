@@ -48,7 +48,11 @@ final class Extension extends AbstractExtension
 
     public function removeEmptyTags(string $xml): string
     {
-        return (string) preg_replace('#<[^/>][^>]*></[^>]+>#', '', $xml);
+        // Remove empty CDATA sections before checking for empty tags
+        $xml = (string) preg_replace('#<!\[CDATA\[\s*\]\]>#', '', $xml);
+
+        // Exclude CDATA from matching as "opening tags" by requiring the tag not to start with "!"
+        return (string) preg_replace('#<[^/>!][^>]*></[^>]+>#', '', $xml);
     }
 
     public function generateFeedUrl(FeedInterface $feed, ChannelInterface $channel, LocaleInterface $locale): string
